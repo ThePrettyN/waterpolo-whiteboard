@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Board from './components/board/Board';
+import ToolBar from './components/layout/ToolBar';
+import PositionSelector from './components/layout/PositionSelector';
+import RightPanel from './components/layout/RightPanel';
+import { BoardProvider } from './context/BoardContext';
+import { PositionProvider } from './context/PositionContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BoardProvider>
+      <PositionProvider>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 p-4">
+          <div className="flex flex-col col-span-3 gap-y-2">
+            <PositionSelector />
+            <Board />
+            <ToolBar />
+          </div>
+          <div className="col-span-2">
+            <RightPanel />
+          </div>
+        </div>
+      </PositionProvider>
+    </BoardProvider>
   );
 }
 
