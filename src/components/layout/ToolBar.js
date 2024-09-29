@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { BoardContext } from '../../context/BoardContext';
 
-function ToolBar() {
+const ToolBar = () => {
   const { currentTool, setCurrentTool } = useContext(BoardContext);
 
   const icons = [
@@ -29,6 +29,6 @@ function ToolBar() {
       ))}
     </div>
   );
-}
+};
 
 export default ToolBar;

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { PositionContext } from '../../context/PositionContext';
 import { BoardContext } from '../../context/BoardContext';
 
-function PositionSelector() {
+const PositionSelector = () => {
   const { updatePositions } = useContext(PositionContext);
   const { resetPositions } = useContext(BoardContext);
 
@@ -35,6 +35,6 @@ function PositionSelector() {
       ))}
     </div>
   );
-}
+};
 
 export default PositionSelector;

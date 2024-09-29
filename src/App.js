@@ -2,6 +2,7 @@ import React from 'react';
 import Board from './components/board/Board';
 import ToolBar from './components/layout/ToolBar';
 import PositionSelector from './components/layout/PositionSelector';
+import StepViewer from './components/layout/StepViewer';
 import RightPanel from './components/layout/RightPanel';
 import { BoardProvider } from './context/BoardContext';
 import { PositionProvider } from './context/PositionContext';
@@ -15,6 +16,7 @@ function App() {
             <PositionSelector />
             <Board />
             <ToolBar />
+            <StepViewer />
           </div>
           <div className="col-span-2">
             <RightPanel />

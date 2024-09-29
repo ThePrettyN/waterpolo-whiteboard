@@ -63,15 +63,22 @@ export const BoardProvider = ({ children }) => {
   // Store board steps as an array of snapshots
   const [steps, setSteps] = useState([]);
   const saveStep = () => {
-    const currentStep = {
-      objects: [...objects],
-      shapes: [...shapes]
+    const deepClone = (items) => {
+      return items.map((item) => {
+        return Object.assign(Object.create(Object.getPrototypeOf(item)), item);
+      });
     };
+  
+    const currentStep = {
+      objects: deepClone(objects),
+      shapes: deepClone(shapes)
+    };
+  
     setSteps([...steps, currentStep]);
   };
 
   return (
-    <BoardContext.Provider value={{ objects, setObjects, currentTool, setCurrentTool, resetPositions, shapes, setShapes, steps, saveStep }}>
+    <BoardContext.Provider value={{ objects, setObjects, currentTool, setCurrentTool, resetPositions, shapes, setShapes, steps, setSteps, saveStep }}>
       {children}
     </BoardContext.Provider>
   );

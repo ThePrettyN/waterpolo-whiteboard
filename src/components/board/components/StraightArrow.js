@@ -1,5 +1,6 @@
 class StraightArrow {
   constructor(startX, startY, isDashed = false) {
+    this.id = new Date().getTime();
     this.startX = startX;
     this.startY = startY;
     this.endX = startX;
