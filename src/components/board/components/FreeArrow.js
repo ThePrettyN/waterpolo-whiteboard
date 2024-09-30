@@ -2,7 +2,7 @@ class FreeArrow {
   constructor(startX, startY, isDashed = false) {
     this.id = new Date().getTime();
     this.points = [{ x: startX, y: startY }];
-    this.threshold = 10; // Adjust this value for more or less smoothing
+    this.threshold = 12; // Adjust this value for more or less smoothing
     this.isDashed = isDashed;
   }
 

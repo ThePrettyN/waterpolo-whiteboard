@@ -75,6 +75,7 @@ export const BoardProvider = ({ children }) => {
     };
   
     setSteps([...steps, currentStep]);
+    setShapes([]);
   };
 
   return (

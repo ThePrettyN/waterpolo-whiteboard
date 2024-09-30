@@ -13,8 +13,8 @@ class BoardObject {
 
   // Method to check if an object was clicked on
   handleMouseDown(offsetX, offsetY) {
-    const isClicked = Math.hypot(this.x - offsetX, this.y - offsetY) < 20;
-
+    const hitRange = window.innerWidth <= 640 ? 32 : 20;
+    const isClicked = Math.hypot(this.x - offsetX, this.y - offsetY) < hitRange;
     if (isClicked) {
       this.isDragging = true;
       this.offset = { x: offsetX - this.x, y: offsetY - this.y };
