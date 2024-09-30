@@ -10,7 +10,6 @@ const PositionSelector = () => {
     { label: 'Clear' },
     { label: '6-on-6' },
     { label: '6-on-5' },
-    { label: 'Sidelines' },
     { label: 'Counterattack' },
   ];
 

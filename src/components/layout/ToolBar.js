@@ -9,6 +9,7 @@ const ToolBar = () => {
     { src: '/assets/icons/arrow_free.svg', alt: 'Free arrow', tool: 'free-arrow' },
     { src: '/assets/icons/arrow_straight_dash.svg', alt: 'Dashed straight arrow', tool: 'straight-arrow-dashed' },
     { src: '/assets/icons/arrow_free_dash.svg', alt: 'Dashed free arrow', tool: 'free-arrow-dashed' },
+    { src: '/assets/icons/ball_icon.svg', alt: 'Ball', tool: 'ball' },
     { src: '/assets/icons/eraser.svg', alt: 'Eraser', tool: 'eraser' },
   ];
 

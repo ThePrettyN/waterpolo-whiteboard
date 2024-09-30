@@ -3,6 +3,8 @@ import { BoardContext } from '../../context/BoardContext';
 import { drawBoard, getMousePosition, isOutsidePlayground, isEraserOverShape } from './utils/boardUtils';
 import StraightArrow from './components/StraightArrow';
 import FreeArrow from './components/FreeArrow';
+import Ball from './components/Ball';
+import Player from './components/Player';
 
 const Board = () => {
   const canvasRef = useRef();
@@ -53,10 +55,12 @@ const Board = () => {
     for (let obj of objects) {
       const clicked = obj.handleMouseDown(offsetX, offsetY);
       if (clicked) {
-        setDraggedObject(obj);
-        objectClicked = true;
-        setCurrentTool(null);
-        break;
+        if (obj instanceof Player || currentTool !== 'eraser') {
+          setDraggedObject(obj);
+          objectClicked = true;
+          setCurrentTool(null);
+          break;
+        }
       }
     }
 
@@ -73,8 +77,15 @@ const Board = () => {
       } else if (currentTool === 'free-arrow-dashed') {
         const newArrow = new FreeArrow(offsetX, offsetY, true);
         setTempShape(newArrow);
+      } else if (currentTool === 'ball') {
+        let newBallId = objects[objects.length - 1].id + 1;
+        if (newBallId < 101) newBallId = 101;
+        const newBall = new Ball(newBallId, offsetX, offsetY);
+        setObjects([...objects, newBall]);
       } else if (currentTool === 'eraser') {
+        const filteredObjects = objects.filter(obj => !isEraserOverShape(offsetX, offsetY, obj));
         const filteredShapes = shapes.filter(shape => !isEraserOverShape(offsetX, offsetY, shape));
+        setObjects(filteredObjects);
         setShapes(filteredShapes);
 
         const canvas = canvasRef.current;

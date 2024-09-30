@@ -1,5 +1,6 @@
 import StraightArrow from '../components/StraightArrow'
 import FreeArrow from '../components/FreeArrow'
+import Ball from '../components/Ball';
 
 export const drawBoard = (context, image, objects, draggedObject, shapes, tempShape) => {
   // Clear the canvas
@@ -88,5 +89,12 @@ export const isEraserOverShape = (eraserX, eraserY, shape) => {
     });
   }
 
+  // Check overlap with ball
+  if (shape instanceof Ball) {
+    const distance = Math.hypot(shape.x - eraserX, shape.y - eraserY);
+    return distance <= eraserRadius;
+  }
+
   return false;
 };
+
