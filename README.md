@@ -2,8 +2,8 @@
 
 A React project for water polo coaches to create plans and download them as GIFs.
 
-![Interactive Whiteboard Preview](/preview.gif)
-![Whiteboard Screenshot](/overview.png)
+![Interactive Whiteboard Preview](/public/preview.gif)
+![Whiteboard Screenshot](/public/overview.png)
 
 ## Installation
 
