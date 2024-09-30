@@ -9,6 +9,7 @@ const Board = () => {
   const { currentTool, setCurrentTool } = useContext(BoardContext);
   const { objects, setObjects } = useContext(BoardContext);
   const { shapes, setShapes } = useContext(BoardContext);
+  const { saveStep } = useContext(BoardContext);
   const [draggedObject, setDraggedObject] = useState(null);
   const [boardImgLoaded, setBoardImgLoaded] = useState(false);
   const [tempShape, setTempShape] = useState(null);
@@ -28,6 +29,18 @@ const Board = () => {
     const context = canvas.getContext('2d');
     drawBoard(context, boardImg.current, objects, draggedObject, shapes, tempShape);
   }, [objects, draggedObject, shapes, tempShape, boardImgLoaded]);
+
+  const handleTouchStart = (event) => {
+    handleMouseDown(event);
+  };
+
+  const handleTouchMove = (event) => {
+    handleMouseMove(event);
+  };
+
+  const handleTouchEnd = () => {
+    handleMouseUp();
+  };
 
   const handleMouseDown = (event) => {
     const { offsetX, offsetY } = getMousePosition(event, canvasRef.current);
@@ -83,8 +96,9 @@ const Board = () => {
       }
     }
     for (let obj of objects) {
+      const hitRange = window.innerWidth <= 640 ? 32 : 20;
       const distance = Math.hypot(obj.x - offsetX, obj.y - offsetY);
-      if (distance <= 20) {
+      if (distance <= hitRange) {
         cursorOverShape = true;
         break;
       }
@@ -125,15 +139,39 @@ const Board = () => {
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={1000}
-      height={600}
-      style={{ border: '2px solid black', width: '100%', height: 'auto' }}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    />
+    <>
+      <div className="relative">
+        <canvas
+          ref={canvasRef}
+          width={1000}
+          height={600}
+          style={{ border: '2px solid black', width: '100%', height: 'auto', touchAction: 'none' }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        />
+        <div className="absolute bottom-0 right-0 m-2 sm:m-4 lg:hidden">
+          <button onClick={saveStep} className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 sm:w-12 sm:h-12">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 

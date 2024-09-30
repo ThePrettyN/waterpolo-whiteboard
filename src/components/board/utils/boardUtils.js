@@ -34,8 +34,22 @@ export const getMousePosition = (event, canvas) => {
   const scaleX = canvas.width / rect.width;
   const scaleY = canvas.height / rect.height;
 
-  const offsetX = (event.clientX - rect.left) * scaleX;
-  const offsetY = (event.clientY - rect.top) * scaleY;
+  // Check if the event is a touch event or mouse event
+  let clientX, clientY;
+
+  if (event.touches && event.touches.length > 0) {
+    // Touch event
+    clientX = event.touches[0].clientX;
+    clientY = event.touches[0].clientY;
+  } else {
+    // Mouse event
+    clientX = event.clientX;
+    clientY = event.clientY;
+  }
+
+  // Calculate offset position based on the canvas scale
+  const offsetX = (clientX - rect.left) * scaleX;
+  const offsetY = (clientY - rect.top) * scaleY;
 
   return { offsetX, offsetY };
 };
@@ -53,7 +67,8 @@ export const isOutsidePlayground = (x, y) => {
 
 export const isEraserOverShape = (eraserX, eraserY, shape) => {
   // Define the tolerance for erasing (adjust as needed)
-  const eraserRadius = 20;
+  const hitRange = window.innerWidth <= 640 ? 32 : 20;
+  const eraserRadius = hitRange;
 
   // Check overlap with straight arrows
   if (shape instanceof StraightArrow) {
