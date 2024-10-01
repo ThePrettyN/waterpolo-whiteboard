@@ -54,6 +54,7 @@ const StepViewer = () => {
           </button>
         </div>
       ))}
+      {thumbnails.length === 0 && <p className="text-gray-500">Steps will be added here...</p>}
       <canvas ref={canvasRef} style={{ display: 'none' }} width={1000} height={600} />
     </div>
   );

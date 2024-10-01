@@ -31,17 +31,6 @@ export const PositionProvider = ({ children }) => {
       { id: 14, x: 500, y: 100 }, // Team B goalkeeper
       { id: 101, x: 390, y: 400 }, // Ball
     ],
-    'Sidelines': [
-      { id: 1, x: 750, y: 325 }, { id: 2, x: 750, y: 355 },
-      { id: 3, x: 750, y: 385 }, { id: 4, x: 750, y: 415 },
-      { id: 5, x: 750, y: 445 }, { id: 6, x: 750, y: 475 },
-      // { id: 7, x: 50, y: 350 }, // Team A goalkeeper
-      { id: 8, x: 825, y: 325 }, { id: 9, x: 825, y: 355 },
-      { id: 10, x: 825, y: 385 }, { id: 11, x: 825, y: 415 },
-      { id: 12, x: 825, y: 445 }, { id: 13, x: 825, y: 475 },
-      { id: 14, x: 825, y: 505 }, // Team B goalkeeper
-      { id: 101, x: 750, y: 505 }, // Ball
-    ],
     'Counterattack': [
       { id: 1, x: 200, y: 520 }, { id: 2, x: 350, y: 520 },
       { id: 3, x: 500, y: 520 }, { id: 4, x: 650, y: 520 },

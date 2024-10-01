@@ -1,8 +1,7 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import { BoardContext } from '../../context/BoardContext';
+import { formatDescription, renderInterpolatedFrame } from '../board/utils/generateGIF';
 import gifshot from 'gifshot';
-import StraightArrow from '../board/components/StraightArrow';
-import FreeArrow from '../board/components/FreeArrow';
 
 const RightPanel = () => {
   const { steps, setSteps, saveStep, resetPositions } = useContext(BoardContext);
@@ -14,7 +13,6 @@ const RightPanel = () => {
   const [description, setDescription] = useState('');
   const [gifBlob, setGifBlob] = useState(null);
   const [invalidTitle, setInvalidTitle] = useState(false);
-  const [invalidDescription, setInvalidDescription] = useState(false);
 
   useEffect(() => {
     const img = new Image();
@@ -33,32 +31,41 @@ const RightPanel = () => {
   };
 
   const generatePreview = () => {
-    if (!title.trim() || !description.trim()) {
-      setInvalidTitle(!title.trim());
-      setInvalidDescription(!description.trim());
+    if (!title.trim()) {
+      setInvalidTitle(true);
       return;
     }
     setInvalidTitle(false);
-    setInvalidDescription(false);
     setLoading(true);
+    setGifBlob(null);
 
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+
+    const maxWidth = 800;
+    const lineHeight = 24;
+    context.font = '18px Arial';
+
+    const lines = formatDescription(description, context, maxWidth);
+    const descriptionHeight = lines.length * lineHeight;
+
+    canvas.height = 600 + descriptionHeight;
+
     const frames = [];
 
-    for (let i = 0; i < steps.length - 1; i++) {
+    for (let i = 0; i < steps.length; i++) {
       const currentStep = steps[i];
-      const nextStep = steps[i + 1];
+      const prevStep = i === 0 ? null : steps[i - 1];
 
-      for (let frameIndex = 0; frameIndex < 12; frameIndex++) {
-        const t = (frameIndex + 1) / 12;
+      for (let frameIndex = 0; frameIndex < 24; frameIndex++) {
+        const t = (frameIndex + 1) / 24;
 
-        renderInterpolatedFrame(context, currentStep, nextStep, t, boardImage);
+        renderInterpolatedFrame(context, prevStep, currentStep, t, boardImage, title, lines);
         frames.push(canvas.toDataURL());
       }
 
-      renderInterpolatedFrame(context, currentStep, nextStep, 1, boardImage);
-      for (let j = 0; j < 12; j++) {
+      renderInterpolatedFrame(context, prevStep, currentStep, 1, boardImage, title, lines);
+      for (let j = 0; j < 24; j++) {
         frames.push(canvas.toDataURL());
       }
     }
@@ -67,7 +74,7 @@ const RightPanel = () => {
         images: frames,
         gifWidth: canvas.width,
         gifHeight: canvas.height,
-        interval: 0.16,
+        interval: 0.02,
       },
       (obj) => {
         setLoading(false);
@@ -99,8 +106,8 @@ const RightPanel = () => {
       </div>
 
       <div className="mb-4">
-        <label htmlFor="description" className={`block text-sm font-bold mb-2 ${!invalidDescription ? 'text-gray-700' : 'text-red-500'}`}>
-          Description {invalidDescription && '*'}
+        <label htmlFor="description" className="block text-sm font-bold mb-2 text-gray-700">
+          Description
         </label>
         <textarea
           id="description"
@@ -108,14 +115,14 @@ const RightPanel = () => {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Type a description..."
           rows="4"
-          className={`w-full p-2 border rounded resize-none ${!invalidDescription ? 'border-gray-300' : 'border-red-500'}`}
+          className="w-full p-2 border rounded resize-none border-gray-300"
         />
       </div>
 
       <div className="flex gap-2 mb-4">
         <button
           onClick={saveStep}
-          className="flex-1 flex items-center justify-center px-4 py-2 border border-gray-300 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 w-full"
+          className="hidden lg:flex flex-1 items-center justify-center px-4 py-2 border border-gray-300 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 w-full"
         >
           + Add Step
         </button>
@@ -165,69 +172,6 @@ const RightPanel = () => {
       <canvas ref={canvasRef} style={{ display: 'none' }} width={1000} height={600} />
     </div>
   );
-};
-
-const renderInterpolatedFrame = (context, step1, step2, t, boardImage) => {
-  context.fillStyle = 'white';
-  context.fillRect(0, 0, context.canvas.width, context.canvas.height);
-
-  if (boardImage) {
-    context.drawImage(boardImage, 100, 50, 800, 500);
-  }
-
-  // Interpolate positions of objects
-  step1.objects.forEach((obj, index) => {
-    const startObj = step1.objects[index];
-    const endObj = step2.objects[index];
-
-    // Calculate interpolated position
-    const interpolatedX = startObj.x + t * (endObj.x - startObj.x);
-    const interpolatedY = startObj.y + t * (endObj.y - startObj.y);
-
-    const interpolatedObj = Object.create(Object.getPrototypeOf(startObj), {
-      ...Object.getOwnPropertyDescriptors(startObj),
-      x: { value: interpolatedX, writable: true, configurable: true },
-      y: { value: interpolatedY, writable: true, configurable: true },
-    });
-
-    interpolatedObj.draw(context);
-  });
-
-  step1.shapes.forEach((shape1) => {
-    const matchingShape = step2.shapes.find((shape2) => shape2.id === shape1.id);
-    if (matchingShape) {
-      shape1.draw(context);
-    }
-  });
-
-  const newShapes = step2.shapes.filter(
-    (shape2) => !step1.shapes.some((shape1) => shape1.id === shape2.id)
-  );
-  newShapes.forEach((shape) => {
-    if (shape instanceof StraightArrow) {
-      const interpolatedX = shape.startX + (shape.endX - shape.startX) * t;
-      const interpolatedY = shape.startY + (shape.endY - shape.startY) * t;
-
-      const interpolatedShape = Object.create(Object.getPrototypeOf(shape), {
-        ...Object.getOwnPropertyDescriptors(shape),
-        endX: { value: interpolatedX, writable: true, configurable: true },
-        endY: { value: interpolatedY, writable: true, configurable: true },
-      });
-
-      interpolatedShape.draw(context);
-    } else if (shape instanceof FreeArrow) {
-      const totalPoints = shape.points.length;
-
-      const pointsToDraw = Math.ceil(t * totalPoints);
-
-      const interpolatedShape = Object.create(Object.getPrototypeOf(shape), {
-        ...Object.getOwnPropertyDescriptors(shape),
-        points: { value: shape.points.slice(0, pointsToDraw), writable: true, configurable: true },
-      });
-
-      interpolatedShape.draw(context);
-    }
-  });
 };
 
 export default RightPanel;
