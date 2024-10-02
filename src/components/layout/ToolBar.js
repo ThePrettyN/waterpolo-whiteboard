@@ -1,16 +1,22 @@
 import React, { useContext } from 'react';
 import { BoardContext } from '../../context/BoardContext';
+import ArrowStraightSvg from '../../assets/icons/arrow_straight.svg';
+import ArrowFreeSvg from '../../assets/icons/arrow_free.svg';
+import ArrowStraightDashedSvg from '../../assets/icons/arrow_straight_dash.svg';
+import ArrowFreeDashedSvg from '../../assets/icons/arrow_free_dash.svg';
+import BallSvg from '../../assets/icons/ball_icon.svg';
+import EraserSvg from '../../assets/icons/eraser.svg';
 
 const ToolBar = () => {
   const { currentTool, setCurrentTool } = useContext(BoardContext);
 
   const icons = [
-    { src: '/assets/icons/arrow_straight.svg', alt: 'Straight arrow', tool: 'straight-arrow' },
-    { src: '/assets/icons/arrow_free.svg', alt: 'Free arrow', tool: 'free-arrow' },
-    { src: '/assets/icons/arrow_straight_dash.svg', alt: 'Dashed straight arrow', tool: 'straight-arrow-dashed' },
-    { src: '/assets/icons/arrow_free_dash.svg', alt: 'Dashed free arrow', tool: 'free-arrow-dashed' },
-    { src: '/assets/icons/ball_icon.svg', alt: 'Ball', tool: 'ball' },
-    { src: '/assets/icons/eraser.svg', alt: 'Eraser', tool: 'eraser' },
+    { src: ArrowStraightSvg, alt: 'Straight arrow', tool: 'straight-arrow' },
+    { src: ArrowFreeSvg, alt: 'Free arrow', tool: 'free-arrow' },
+    { src: ArrowStraightDashedSvg, alt: 'Dashed straight arrow', tool: 'straight-arrow-dashed' },
+    { src: ArrowFreeDashedSvg, alt: 'Dashed free arrow', tool: 'free-arrow-dashed' },
+    { src: BallSvg, alt: 'Ball', tool: 'ball' },
+    { src: EraserSvg, alt: 'Eraser', tool: 'eraser' },
   ];
 
   const handleIconClick = (tool) => {

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BoardContext } from "../../context/BoardContext";
+import GroundSvg from '../../assets/ground.svg';
 
 const StepViewer = () => {
   const { steps, setSteps } = useContext(BoardContext);
@@ -9,7 +10,7 @@ const StepViewer = () => {
 
   useEffect(() => {
     const img = new Image();
-    img.src = '/assets/ground.svg';
+    img.src = GroundSvg;
     img.onload = () => setBoardImage(img);
   }, []);
 
