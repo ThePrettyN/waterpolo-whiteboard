@@ -1,10 +1,11 @@
 import BoardObject from './BoardObject';
+import BallSvg from '../../../assets/ball.svg';
 
 class Ball extends BoardObject {
   constructor(id, x, y) {
     super(id, x, y);
     this.image = new Image();
-    this.image.src = '/assets/ball.svg';
+    this.image.src = BallSvg;
   }
 
   draw(context) {

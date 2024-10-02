@@ -5,6 +5,7 @@ import StraightArrow from './components/StraightArrow';
 import FreeArrow from './components/FreeArrow';
 import Ball from './components/Ball';
 import Player from './components/Player';
+import GroundSvg from '../../assets/ground.svg';
 
 const Board = () => {
   const canvasRef = useRef();
@@ -18,7 +19,7 @@ const Board = () => {
   const boardImg = useRef(new Image());
 
   useEffect(() => {
-    boardImg.current.src = '/assets/ground.svg';
+    boardImg.current.src = GroundSvg;
     boardImg.current.onload = () => {
       setBoardImgLoaded(true);
     };
@@ -100,10 +101,12 @@ const Board = () => {
 
     let cursorOverShape = false;
 
-    for (let shape of shapes) {
-      if (isEraserOverShape(offsetX, offsetY, shape)) {
-        cursorOverShape = true;
-        break;
+    if (currentTool === 'eraser') {
+      for (let shape of shapes) {
+        if (isEraserOverShape(offsetX, offsetY, shape)) {
+          cursorOverShape = true;
+          break;
+        }
       }
     }
     for (let obj of objects) {
@@ -114,7 +117,8 @@ const Board = () => {
         break;
       }
     }
-    canvasRef.current.style.cursor = cursorOverShape || draggedObject ? 'pointer' : 'default';
+    const cursor = currentTool === 'eraser' ? 'pointer' : 'move';
+    canvasRef.current.style.cursor = cursorOverShape || draggedObject ? cursor : 'default';
 
     // Handle drawing
     if (tempShape && !isOutsidePlayground(offsetX, offsetY)) {

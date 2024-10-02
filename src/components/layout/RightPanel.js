@@ -1,7 +1,8 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import { BoardContext } from '../../context/BoardContext';
 import { formatDescription, renderInterpolatedFrame } from '../board/utils/generateGIF';
-import gifshot from 'gifshot';
+import GIF from 'gif.js';
+import GroundSvg from '../../assets/ground.svg';
 
 const RightPanel = () => {
   const { steps, setSteps, saveStep, resetPositions } = useContext(BoardContext);
@@ -16,19 +17,12 @@ const RightPanel = () => {
 
   useEffect(() => {
     const img = new Image();
-    img.src = '/assets/ground.svg';
+    img.src = GroundSvg;
     img.onload = () => {
       setBoardImage(img);
       setPreviewImageSrc(img.src);
     };
   }, []);
-
-  const base64ToBlob = (base64, mimeType) => {
-    const byteChars = atob(base64.split(',')[1]);
-    const byteNumbers = new Array(byteChars.length).fill().map((_, i) => byteChars.charCodeAt(i));
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mimeType });
-  };
 
   const generatePreview = () => {
     if (!title.trim()) {
@@ -51,42 +45,40 @@ const RightPanel = () => {
 
     canvas.height = 600 + descriptionHeight;
 
-    const frames = [];
+    const gif = new GIF({
+      workers: 2,
+      quality: 30,
+      // workerScript: 'https://waterpoloauthority.com/wp-content/uploads/2023/10/raw.githubusercontent.com_jnordberg_gif.js_master_dist_gif.worker.js', // for production
+      workerScript: '/gif.worker.js',  // for development
+      width: canvas.width,
+      height: canvas.height,
+    });
 
     for (let i = 0; i < steps.length; i++) {
       const currentStep = steps[i];
       const prevStep = i === 0 ? null : steps[i - 1];
 
-      for (let frameIndex = 0; frameIndex < 24; frameIndex++) {
-        const t = (frameIndex + 1) / 24;
-
-        renderInterpolatedFrame(context, prevStep, currentStep, t, boardImage, title, lines);
-        frames.push(canvas.toDataURL());
+      if (i > 0) {
+        for (let frameIndex = 0; frameIndex < 6; frameIndex++) {
+          const t = (frameIndex + 1) / 6;
+  
+          renderInterpolatedFrame(context, prevStep, currentStep, t, boardImage, title, lines);
+          gif.addFrame(canvas, { copy: true, delay: 100 });
+        }
       }
 
       renderInterpolatedFrame(context, prevStep, currentStep, 1, boardImage, title, lines);
-      for (let j = 0; j < 24; j++) {
-        frames.push(canvas.toDataURL());
-      }
+      gif.addFrame(canvas, { copy: true, delay: 900 });
     }
-    gifshot.createGIF(
-      {
-        images: frames,
-        gifWidth: canvas.width,
-        gifHeight: canvas.height,
-        interval: 0.02,
-      },
-      (obj) => {
-        setLoading(false);
 
-        if (!obj.error) {
-          const image = obj.image;
-          setPreviewImageSrc(image);
-          const gifBlob = base64ToBlob(image, 'image/gif');
-          setGifBlob(gifBlob);
-        }
-      }
-    );
+    gif.on('finished', (blob) => {
+      const url = URL.createObjectURL(blob);
+      setPreviewImageSrc(url);
+      setGifBlob(blob);
+      setLoading(false);
+    });
+
+    gif.render();
   };
 
   return (
@@ -153,7 +145,7 @@ const RightPanel = () => {
           onClick={() => {
             setGifBlob(null);
             setSteps([]);
-            setPreviewImageSrc('/assets/ground.svg');
+            setPreviewImageSrc(GroundSvg);
             resetPositions();
           }}
           className="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300">
