@@ -59,16 +59,16 @@ const RightPanel = () => {
       const prevStep = i === 0 ? null : steps[i - 1];
 
       if (i > 0) {
-        for (let frameIndex = 0; frameIndex < 6; frameIndex++) {
-          const t = (frameIndex + 1) / 6;
+        for (let frameIndex = 0; frameIndex < 10; frameIndex++) {
+          const t = (frameIndex + 1) / 10;
   
           renderInterpolatedFrame(context, prevStep, currentStep, t, boardImage, title, lines);
-          gif.addFrame(canvas, { copy: true, delay: 100 });
+          gif.addFrame(canvas, { copy: true, delay: 50 });
         }
       }
 
       renderInterpolatedFrame(context, prevStep, currentStep, 1, boardImage, title, lines);
-      gif.addFrame(canvas, { copy: true, delay: 900 });
+      gif.addFrame(canvas, { copy: true, delay: 1000 });
     }
 
     gif.on('finished', (blob) => {
