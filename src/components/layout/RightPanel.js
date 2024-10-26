@@ -2,10 +2,12 @@ import React, { useRef, useContext, useState, useEffect } from 'react';
 import { BoardContext } from '../../context/BoardContext';
 import { formatDescription, renderInterpolatedFrame } from '../board/utils/generateGIF';
 import GIF from 'gif.js';
-import GroundSvg from '../../assets/ground.svg';
+import HalfCourt from '../../assets/half-court.svg';
+import FullCourt from '../../assets/full-court.svg';
 
 const RightPanel = () => {
   const { steps, setSteps, saveStep, resetPositions } = useContext(BoardContext);
+  const { bgMode } = useContext(BoardContext);
   const canvasRef = useRef();
   const [boardImage, setBoardImage] = useState();
   const [previewImageSrc, setPreviewImageSrc] = useState();
@@ -17,12 +19,13 @@ const RightPanel = () => {
 
   useEffect(() => {
     const img = new Image();
-    img.src = GroundSvg;
+    const bgImages = [ HalfCourt, FullCourt ];
+    img.src = bgImages[bgMode];
     img.onload = () => {
       setBoardImage(img);
       setPreviewImageSrc(img.src);
     };
-  }, []);
+  }, [bgMode]);
 
   const generatePreview = () => {
     if (!title.trim()) {
@@ -79,6 +82,14 @@ const RightPanel = () => {
     });
 
     gif.render();
+  };
+
+  const startOver = () => {
+    setGifBlob(null);
+    setSteps([]);
+    const bgImages = [ HalfCourt, FullCourt ];
+    setPreviewImageSrc(bgImages[bgMode]);
+    resetPositions();
   };
 
   return (
@@ -142,12 +153,7 @@ const RightPanel = () => {
       {/* Start Over Button */}
       <div className='grid grid-flow-col gap-2'>
         <button
-          onClick={() => {
-            setGifBlob(null);
-            setSteps([]);
-            setPreviewImageSrc(GroundSvg);
-            resetPositions();
-          }}
+          onClick={startOver}
           className="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300">
           Start Over
         </button>

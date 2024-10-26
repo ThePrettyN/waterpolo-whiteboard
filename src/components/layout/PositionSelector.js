@@ -5,12 +5,21 @@ import { BoardContext } from '../../context/BoardContext';
 const PositionSelector = () => {
   const { updatePositions } = useContext(PositionContext);
   const { resetPositions } = useContext(BoardContext);
+  const { bgMode } = useContext(BoardContext);
 
   const positionSet = [
-    { label: 'Clear' },
-    { label: '6-on-6' },
-    { label: '6-on-5' },
-    { label: 'Counterattack' },
+    [
+      { label: 'Clear' },
+      { label: '6-on-6' },
+      { label: '6-on-5' },
+      { label: 'Counterattack' },
+    ],
+    [
+      { label: 'Clear' },
+      { label: '6-on-6' },
+      { label: '6-on-5' },
+      { label: 'Swim Off' },
+    ],
   ];
 
   const handlePositionChange = (position) => {
@@ -23,7 +32,7 @@ const PositionSelector = () => {
 
   return (
     <div className="position-selector flex justify-center gap-1">
-      {positionSet.map((pos, index) => (
+      {positionSet[bgMode].map((pos, index) => (
         <button
           key={index}
           onClick={() => handlePositionChange(pos.label)}

@@ -5,7 +5,8 @@ import StraightArrow from './components/StraightArrow';
 import FreeArrow from './components/FreeArrow';
 import Ball from './components/Ball';
 import Player from './components/Player';
-import GroundSvg from '../../assets/ground.svg';
+import HalfCourt from '../../assets/half-court.svg';
+import FullCourt from '../../assets/full-court.svg';
 
 const Board = () => {
   const canvasRef = useRef();
@@ -13,17 +14,20 @@ const Board = () => {
   const { objects, setObjects } = useContext(BoardContext);
   const { shapes, setShapes } = useContext(BoardContext);
   const { saveStep } = useContext(BoardContext);
+  const { bgMode } = useContext(BoardContext);
   const [draggedObject, setDraggedObject] = useState(null);
   const [boardImgLoaded, setBoardImgLoaded] = useState(false);
   const [tempShape, setTempShape] = useState(null);
   const boardImg = useRef(new Image());
 
   useEffect(() => {
-    boardImg.current.src = GroundSvg;
+    setBoardImgLoaded(false);
+    const bgImages = [ HalfCourt, FullCourt ];
+    boardImg.current.src = bgImages[bgMode];
     boardImg.current.onload = () => {
       setBoardImgLoaded(true);
     };
-  }, []);
+  }, [bgMode]);
 
   useEffect(() => {
     if (!boardImgLoaded) return;
@@ -145,6 +149,7 @@ const Board = () => {
       setShapes([...shapes, tempShape]);
       setTempShape(null);
     } else if (draggedObject) {
+      console.log(draggedObject.x, draggedObject.y)
       // Handle dragging object
       if (isOutsidePlayground(draggedObject.x, draggedObject.y)) {
         draggedObject.resetPosition();

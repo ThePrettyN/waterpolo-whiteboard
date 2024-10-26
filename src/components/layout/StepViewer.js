@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BoardContext } from "../../context/BoardContext";
-import GroundSvg from '../../assets/ground.svg';
+import HalfCourt from '../../assets/half-court.svg';
+import FullCourt from '../../assets/full-court.svg';
 
 const StepViewer = () => {
   const { steps, setSteps } = useContext(BoardContext);
+  const { bgMode } = useContext(BoardContext);
   const [thumbnails, setThumbnails] = useState([]);
   const canvasRef = useRef();
   const [boardImage, setBoardImage] = useState();
 
   useEffect(() => {
     const img = new Image();
-    img.src = GroundSvg;
+    const bgImages = [ HalfCourt, FullCourt ];
+    img.src = bgImages[bgMode];
     img.onload = () => setBoardImage(img);
-  }, []);
+  }, [bgMode]);
 
   useEffect(() => {
     // Generate thumbnails for each step when the component mounts or steps change
