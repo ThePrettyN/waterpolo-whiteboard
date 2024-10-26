@@ -56,7 +56,7 @@ export const getMousePosition = (event, canvas) => {
 };
 
 export const isOutsidePlayground = (x, y) => {
-  const playgroundBounds = { x: 150, y: 50, width: 700, height: 500 };
+  const playgroundBounds = { x: 125, y: 50, width: 750, height: 500 };
 
   return (
     x < playgroundBounds.x ||
