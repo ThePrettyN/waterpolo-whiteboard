@@ -3,6 +3,7 @@ import { BoardContext } from '../../context/BoardContext';
 import { drawBoard, getMousePosition, isOutsidePlayground, isEraserOverShape } from './utils/boardUtils';
 import StraightArrow from './components/StraightArrow';
 import FreeArrow from './components/FreeArrow';
+import Pen from './components/Pen';
 import Ball from './components/Ball';
 import Player from './components/Player';
 import HalfCourt from '../../assets/half-court.svg';
@@ -82,6 +83,9 @@ const Board = () => {
       } else if (currentTool === 'free-arrow-dashed') {
         const newArrow = new FreeArrow(offsetX, offsetY, true);
         setTempShape(newArrow);
+      } else if (currentTool === 'pen') {
+        const newArrow = new Pen(offsetX, offsetY, true);
+        setTempShape(newArrow);
       } else if (currentTool === 'ball') {
         let newBallId = objects[objects.length - 1].id + 1;
         if (newBallId < 101) newBallId = 101;
@@ -149,7 +153,6 @@ const Board = () => {
       setShapes([...shapes, tempShape]);
       setTempShape(null);
     } else if (draggedObject) {
-      console.log(draggedObject.x, draggedObject.y)
       // Handle dragging object
       if (isOutsidePlayground(draggedObject.x, draggedObject.y)) {
         draggedObject.resetPosition();
