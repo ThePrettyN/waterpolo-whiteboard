@@ -1,5 +1,6 @@
 import StraightArrow from "../components/StraightArrow";
 import FreeArrow from "../components/FreeArrow";
+import Pen from "../components/Pen";
 
 export const formatDescription = (text, context, maxWidth) => {
   const paragraphs = text.split('\n');
@@ -102,7 +103,7 @@ export const renderInterpolatedFrame = (context, step1, step2, t, boardImage, ti
       });
 
       interpolatedShape.draw(context);
-    } else if (shape instanceof FreeArrow) {
+    } else if (shape instanceof FreeArrow || shape instanceof Pen) {
       const totalPoints = shape.points.length;
       const pointsToDraw = Math.ceil(t * totalPoints);
 

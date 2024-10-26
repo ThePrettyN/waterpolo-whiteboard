@@ -4,6 +4,7 @@ import ArrowStraightSvg from '../../assets/icons/arrow_straight.svg';
 import ArrowFreeSvg from '../../assets/icons/arrow_free.svg';
 import ArrowStraightDashedSvg from '../../assets/icons/arrow_straight_dash.svg';
 import ArrowFreeDashedSvg from '../../assets/icons/arrow_free_dash.svg';
+import PenSvg from '../../assets/icons/pen.svg';
 import BallSvg from '../../assets/icons/ball_icon.svg';
 import EraserSvg from '../../assets/icons/eraser.svg';
 import { Tooltip, Select, InputLabel, FormControl, MenuItem } from '@mui/material';
@@ -16,6 +17,7 @@ const ToolBar = () => {
     { src: ArrowFreeSvg, alt: 'Player Movement', tool: 'free-arrow' },
     { src: ArrowStraightDashedSvg, alt: 'Pass/Shot', tool: 'straight-arrow-dashed' },
     { src: ArrowFreeDashedSvg, alt: 'Pass/Shot', tool: 'free-arrow-dashed' },
+    { src: PenSvg, alt: 'Pen', tool: 'pen' },
     { src: BallSvg, alt: 'Add Balls', tool: 'ball' },
     { src: EraserSvg, alt: 'Eraser', tool: 'eraser' },
   ];

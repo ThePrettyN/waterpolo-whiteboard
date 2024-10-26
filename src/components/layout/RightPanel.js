@@ -6,7 +6,7 @@ import HalfCourt from '../../assets/half-court.svg';
 import FullCourt from '../../assets/full-court.svg';
 
 const RightPanel = () => {
-  const { steps, setSteps, saveStep, resetPositions } = useContext(BoardContext);
+  const { steps, setSteps, saveStep, resetPositions, setCurrentTool } = useContext(BoardContext);
   const { bgMode } = useContext(BoardContext);
   const canvasRef = useRef();
   const [boardImage, setBoardImage] = useState();
@@ -90,6 +90,7 @@ const RightPanel = () => {
     const bgImages = [ HalfCourt, FullCourt ];
     setPreviewImageSrc(bgImages[bgMode]);
     resetPositions();
+    setCurrentTool(null);
   };
 
   return (
