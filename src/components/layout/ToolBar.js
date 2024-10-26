@@ -32,7 +32,7 @@ const ToolBar = () => {
   };
 
   return (
-    <div className="toolbar-container flex justify-center gap-2">
+    <div className="toolbar-container flex justify-center items-center gap-2">
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
         <InputLabel id="demo-select-small-label">Court</InputLabel>
         <Select
@@ -51,7 +51,7 @@ const ToolBar = () => {
         <Tooltip title={icon.alt} key={index} placement="top">
           <button
             onClick={() => handleIconClick(icon.tool)}
-            className={`px-2 py-1 border ${currentTool === icon.tool ? 'bg-yellow-400' : ''} text-sm rounded hover:bg-yellow-500`}
+            className={`h-10 px-2 border ${currentTool === icon.tool ? 'bg-yellow-400' : ''} text-sm rounded hover:bg-yellow-500`}
           >
             <img src={icon.src} alt={icon.alt} className="w-6 h-6" />
           </button>

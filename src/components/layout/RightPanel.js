@@ -1,6 +1,7 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import { BoardContext } from '../../context/BoardContext';
 import { formatDescription, renderInterpolatedFrame } from '../board/utils/generateGIF';
+import ConfirmDialog from './ConfirmDialog';
 import GIF from 'gif.js';
 import HalfCourt from '../../assets/half-court.svg';
 import FullCourt from '../../assets/full-court.svg';
@@ -16,6 +17,8 @@ const RightPanel = () => {
   const [description, setDescription] = useState('');
   const [gifBlob, setGifBlob] = useState(null);
   const [invalidTitle, setInvalidTitle] = useState(false);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const img = new Image();
@@ -85,12 +88,26 @@ const RightPanel = () => {
   };
 
   const startOver = () => {
+    handleOpenStartOverDialog();
+  };
+
+  const handleOpenStartOverDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handleConfirmAction = () => {
     setGifBlob(null);
     setSteps([]);
     const bgImages = [ HalfCourt, FullCourt ];
     setPreviewImageSrc(bgImages[bgMode]);
     resetPositions();
     setCurrentTool(null);
+
+    handleCloseConfirmDialog(); // Close dialog after confirming
   };
 
   return (
@@ -169,6 +186,14 @@ const RightPanel = () => {
         )}
       </div>
       <canvas ref={canvasRef} style={{ display: 'none' }} width={1000} height={600} />
+
+      <ConfirmDialog
+        open={dialogOpen}
+        onClose={handleCloseConfirmDialog}
+        onConfirm={handleConfirmAction}
+        title="Start Over?"
+        message="Are you sure you want to start over?"
+      />
     </div>
   );
 };
