@@ -54,8 +54,7 @@ const RightPanel = () => {
     const gif = new GIF({
       workers: 2,
       quality: 30,
-      // workerScript: 'https://waterpoloauthority.com/wp-content/uploads/2023/10/raw.githubusercontent.com_jnordberg_gif.js_master_dist_gif.worker.js', // for production
-      workerScript: '/gif.worker.js',  // for development
+      workerScript: `${process.env.PUBLIC_URL}/gif.worker.js`,
       width: canvas.width,
       height: canvas.height,
     });
